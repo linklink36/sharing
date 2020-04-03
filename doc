@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1585902278745,
+  "iteration": 1585902278757,
   "links": [],
   "panels": [
     {
@@ -62,7 +62,7 @@
         {
           "alias": "",
           "format": "time_series",
-          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(id) as Email\nFROM\n  epresentment.notification\nWHERE\n  $__timeFilter(AuditCreatedDate) And AuditCreatedByApp ='Email Service'\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
+          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(*) as Email\nFROM\n  Notification\nWHERE\n  $__timeFilter(AuditCreatedDate) And AuditCreatedByApp ='Email Service'\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
           "refId": "A"
         }
       ],
@@ -150,7 +150,7 @@
         {
           "alias": "",
           "format": "time_series",
-          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(id) as Email\nFROM\n  epresentment.notification\nWHERE\n  $__timeFilter(AuditCreatedDate) And AuditCreatedByApp ='SMS Service'\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
+          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(*) as Email\nFROM\n  Notification\nWHERE\n  $__timeFilter(AuditCreatedDate) And AuditCreatedByApp ='SMS Service'\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
           "refId": "A"
         }
       ],
@@ -238,7 +238,7 @@
         {
           "alias": "",
           "format": "time_series",
-          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(id) as Email\nFROM\n  epresentment.notification\nWHERE\n  $__timeFilter(AuditCreatedDate)\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
+          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(*) as Email\nFROM\n  Notification\nWHERE\n  $__timeFilter(AuditCreatedDate)\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
           "refId": "A"
         }
       ],
@@ -246,7 +246,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Count records epresentment.notification",
+      "title": "Count records Notification",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -326,7 +326,7 @@
         {
           "alias": "",
           "format": "time_series",
-          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(id) as Email\nFROM\n  epresentment.notification\nWHERE\n  $__timeFilter(AuditCreatedDate)\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
+          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  Status,\n  count(*) as Email\nFROM\n  Notification\nWHERE\n  $__timeFilter(AuditCreatedDate)\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time),\n  Status\nORDER BY 1",
           "refId": "A"
         }
       ],
@@ -334,7 +334,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Count records epresentment.notification",
+      "title": "Count records Notification",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -412,13 +412,13 @@
         {
           "alias": "",
           "format": "time_series",
-          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  count(*) \nFROM\n  epresentment.notification\nWHERE\n  $__timeFilter(AuditCreatedDate)\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time)\nORDER BY 1",
+          "rawSql": "SELECT\n  $__timeGroup(AuditCreatedDate, $interval_time) as time,\n  count(*) \nFROM\n  Notification\nWHERE\n  $__timeFilter(AuditCreatedDate)\nGROUP BY\n  $__timeGroup(AuditCreatedDate, $interval_time)\nORDER BY 1",
           "refId": "A"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Count records epresentment.notification SUM",
+      "title": "Count records Notification SUM",
       "type": "stat"
     }
   ],
@@ -434,15 +434,15 @@
         "auto_min": "10s",
         "current": {
           "selected": true,
-          "text": "15s",
-          "value": "15s"
+          "text": "1s",
+          "value": "1s"
         },
         "hide": 0,
         "label": null,
         "name": "interval_time",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "1s",
             "value": "1s"
           },
@@ -452,7 +452,7 @@
             "value": "10s"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "15s",
             "value": "15s"
           },
@@ -520,8 +520,8 @@
     ]
   },
   "time": {
-    "from": "2020-04-03T08:43:17.121Z",
-    "to": "2020-04-03T08:48:39.971Z"
+    "from": "now-6h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -543,5 +543,5 @@
   "variables": {
     "list": []
   },
-  "version": 6
+  "version": 7
 }
