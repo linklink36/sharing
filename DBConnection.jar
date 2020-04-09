@@ -1,0 +1,151 @@
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
+import java.util.SimpleTimeZone;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+public class DBConnection {
+
+	private Connection connectToDB(String db_url,String db_driver,String  db_username,String db_password ){
+		Connection conn = null;
+		
+		try{
+			Class.forName(db_driver);
+			conn = DriverManager.getConnection(db_url, db_username, db_password);
+			if (conn != null){
+				System.out.println("DB Connected!");
+				
+			}
+		}catch(Exception e){
+			
+			System.out.println("Something went wrong, cannot conn to DB" + e.getCause());
+		}
+		return conn;
+	}
+	
+	private void closeConnection(Connection conn){
+		try {
+			if (!conn.isClosed()){
+
+				conn.close();
+			}
+			if (conn.isClosed()){
+				System.out.println("Connection closed");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void queryFirst(Connection conn, String query){
+		ResultSet resultSet = null;
+
+        try (
+                PreparedStatement prepsSelectProduct = conn.prepareStatement(query , Statement.RETURN_GENERATED_KEYS);) {
+
+        	prepsSelectProduct.execute();
+            // Retrieve the generated key from the insert.
+            resultSet = prepsSelectProduct.getGeneratedKeys();
+
+            // Print the ID of the inserted row.
+            while (resultSet.next()) {
+                System.out.println("Generated: " + resultSet.getString(1));
+            }
+            resultSet.close();
+            prepsSelectProduct.close();
+        }
+        // Handle any errors that may have occurred.
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+	}
+	private String queryFirst (Connection conn, String query, String column){
+		String result = null;
+		try {
+			System.out.println(conn.getCatalog());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Statement stmt;
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs;
+
+	        rs = stmt.executeQuery(query);
+	        while (rs.next()) {
+                System.out.println("Generated: " + rs.getString(1));
+                result = rs.getString(column);
+            }
+	        rs.close();
+	        stmt.close();
+	        return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+        return result;
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		DBConnection db = new DBConnection();
+		String db_url, db_driver, db_username,db_password;
+
+		db_driver   = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+		if (args.length >=5 ){
+			db_url      = "jdbc:sqlserver://"+args[0]+":"+args[1]+";DatabaseName="+args[2];
+			db_username = args[3];
+			db_password = args[4];
+		}
+		else{
+
+			db_url      = "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=master";//linh_test_db";
+			db_driver   = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+			db_username = "sa";
+			db_password = "Mbfism1909$123";
+		}
+		
+		Properties properties = new Properties();
+		properties.put("user", "sa");
+		properties.put("password", "Mbfism1909$123");
+		Connection conn = db.connectToDB(db_url, db_driver,db_username,db_password );
+		
+		
+		//make string query
+		String query = "select count(name) as count from tb1";
+		//db.query2(conn, query,"count");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-DD HH:MM:ss.S");
+		Calendar curr;
+		
+		curr= Calendar.getInstance();
+		//System.out.println("current time: " + format.format(curr.getTime()));
+		int i =0;
+		for(i=0; i < 5; i ++){
+			curr= Calendar.getInstance();
+			System.out.println("----------"+format.format(curr.getTime()).replace(' ', 'T')+"--------"+db.queryFirst(conn, query,"count").toString());
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		db.closeConnection(conn);
+	}
+
+}
